@@ -51,7 +51,7 @@ namespace RevitIfcPropertyBrowser
 			a.RegisterDockablePane(mPropertyPanel, "IFC Properties", browser);
 
 
-			foreach (Autodesk.Windows.RibbonTab tab in Autodesk.Windows.ComponentManager.Ribbon.Tabs)
+			foreach (RibbonTab tab in ComponentManager.Ribbon.Tabs)
 			{
 				if (tab.Id == "Modify")
 				{

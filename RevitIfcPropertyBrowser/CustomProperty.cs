@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Reflection;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Threading;
-using Autodesk.Revit.Attributes;
-using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
-using Autodesk.Revit.UI.Events;
-using Autodesk.Windows;
 
 using GeometryGym.Ifc;
 
@@ -136,8 +127,6 @@ namespace RevitIfcPropertyBrowser
 					}
 				}
 			}
-
-
 		}
 
 		public string Name { get; set; } = "Selected Object(s)";

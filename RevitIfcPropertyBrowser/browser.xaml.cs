@@ -19,7 +19,6 @@ namespace RevitIfcPropertyBrowser
 		{
 			InitializeComponent();
 			mPropertyGrid = new PropertyGrid();
-			System.Windows.Forms.TextBox tb = new System.Windows.Forms.TextBox() { Text = "jon" };
 			WindowsFormsHost host = new WindowsFormsHost() { Child = mPropertyGrid };
 			grid.Children.Add(host);
 		}
@@ -29,20 +28,8 @@ namespace RevitIfcPropertyBrowser
 			data.FrameworkElement = this as FrameworkElement;
 			data.InitialState = new DockablePaneState();
 			data.InitialState.DockPosition = DockPosition.Tabbed;
-			//DockablePaneId targetPane;
-			//if (m_targetGuid == Guid.Empty)
-			//    targetPane = null;
-			//else targetPane = new DockablePaneId(m_targetGuid);
-			//if (m_position == DockPosition.Tabbed)
-
-			data.InitialState.TabBehind = Autodesk.Revit.UI.DockablePanes.BuiltInDockablePanes.ProjectBrowser;
-			//if (m_position == DockPosition.Floating)
-			//{
-			//data.InitialState.SetFloatingRectangle(new Autodesk.Revit.UI.Rectangle(10, 710, 10, 710));
-			//data.InitialState.DockPosition = DockPosition.Tabbed;
-			//}
-			//Log.Message("***Intial docking parameters***");
-			//Log.Message(APIUtility.GetDockStateSummary(data.InitialState));
+			
+			data.InitialState.TabBehind = DockablePanes.BuiltInDockablePanes.ProjectBrowser;
 		}
 	}
 }
