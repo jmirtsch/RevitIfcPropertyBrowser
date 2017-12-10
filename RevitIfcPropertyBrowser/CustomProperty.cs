@@ -101,32 +101,15 @@ namespace RevitIfcPropertyBrowser
 		}
 		#endregion
 	}
-	internal class ObjectIfcProperties : CollectionBase, ICustomTypeDescriptor
+	internal class RootIfcProperties : CollectionBase, ICustomTypeDescriptor
 	{
-		internal ObjectIfcProperties(IfcElement element)
+		internal RootIfcProperties(IfcRoot root)
 		{
+			string keyword = root.KeyWord;
 			bool readOnly = true;
-			Add(new CustomProperty("GlobalId", element.GlobalId, typeof(string), true, true) { Group = "Element" });
-			Add(new CustomProperty("Name", element.Name, typeof(string), readOnly, true) { Group = "Element" });
-			Add(new CustomProperty("Description", element.Description, typeof(string), readOnly, true) { Group = "Element" });
-			Add(new CustomProperty("ObjectType", element.ObjectType, typeof(string), readOnly, true) { Group = "Element" });
-			Add(new CustomProperty("Type", element.GetType().Name, typeof(string), true, true) { Group = "Element" });
-			Add(new CustomProperty("Tag", element.Tag, typeof(string), readOnly, true) { Group = "Element" });
-
-			foreach (IfcPropertySet pset in element.IsDefinedBy.ToList().ConvertAll(x => x.RelatingPropertyDefinition).OfType<IfcPropertySet>())
-			{
-				foreach (IfcPropertySingleValue psv in pset.HasProperties.Values.ToList().OfType<IfcPropertySingleValue>())
-				{
-					IfcValue val = psv.NominalValue;
-					if (val == null)
-						Add(new CustomProperty(psv.Name, "", typeof(string), readOnly, true) { Group = pset.Name });
-					else
-					{
-						Object obj = val.Value;
-						Add(new CustomProperty(psv.Name, obj, obj.GetType(), readOnly, true) { Group = pset.Name });
-					}
-				}
-			}
+			Add(new CustomProperty("GlobalId", root.GlobalId, typeof(string), true, true) { Group = keyword });
+			Add(new CustomProperty("Name", root.Name, typeof(string), readOnly, true) { Group = keyword });
+			Add(new CustomProperty("Description", root.Description, typeof(string), readOnly, true) { Group = keyword });
 		}
 
 		public string Name { get; set; } = "Selected Object(s)";
@@ -136,7 +119,7 @@ namespace RevitIfcPropertyBrowser
 		}
 		public void Remove(string name)
 		{
-			foreach (CustomProperty prop in base.List)
+			foreach (CustomProperty prop in base.List.OfType<CustomProperty>())
 			{
 				if (string.Compare(prop.Name, name, true) == 0)
 				{
@@ -163,7 +146,7 @@ namespace RevitIfcPropertyBrowser
 		{
 			get
 			{
-				return (CustomProperty)base.List[index];
+				return base.List[index] as CustomProperty;
 			}
 			set
 			{
@@ -218,8 +201,14 @@ namespace RevitIfcPropertyBrowser
 			PropertyDescriptor[] newProps = new PropertyDescriptor[this.Count];
 			for (int i = 0; i < this.Count; i++)
 			{
-				CustomProperty prop = (CustomProperty)this[i];
-				newProps[i] = new CustomPropertyDescriptor(ref prop, attributes);
+				object obj = this[i];
+				CustomProperty prop = obj as CustomProperty;
+				if(prop != null)
+					newProps[i] = new CustomPropertyDescriptor(ref prop, attributes);
+				else
+				{
+
+				}
 			}
 			return new PropertyDescriptorCollection(newProps);
 		}
@@ -230,6 +219,58 @@ namespace RevitIfcPropertyBrowser
 		public object GetPropertyOwner(PropertyDescriptor pd)
 		{
 			return this;
+		}
+	}
+	internal class ElementIfcProperties : RootIfcProperties
+	{ 
+		internal ElementIfcProperties(IfcElement element) : base(element)
+		{
+			string keyword = element.KeyWord;
+			bool readOnly = true;
+			Add(new CustomProperty("ObjectType", element.ObjectType, typeof(string), readOnly, true) { Group = keyword });
+			Add(new CustomProperty("Type", element.GetType().Name, typeof(string), true, true) { Group = keyword });
+			Add(new CustomProperty("Tag", element.Tag, typeof(string), readOnly, true) { Group = keyword });
+
+			IfcElementType elementType = element.RelatingType as IfcElementType;
+			if (elementType != null)
+				List.Add(new ElementTypeIfcProperties(elementType));
+			foreach (IfcPropertySet pset in element.IsDefinedBy.ToList().ConvertAll(x => x.RelatingPropertyDefinition).OfType<IfcPropertySet>())
+			{
+				foreach (IfcPropertySingleValue psv in pset.HasProperties.Values.ToList().OfType<IfcPropertySingleValue>())
+				{
+					IfcValue val = psv.NominalValue;
+					if (val == null)
+						Add(new CustomProperty(psv.Name, "", typeof(string), readOnly, true) { Group = pset.Name });
+					else
+					{
+						Object obj = val.Value;
+						Add(new CustomProperty(psv.Name, obj, obj.GetType(), readOnly, true) { Group = pset.Name });
+					}
+				}
+			}
+		}
+	}
+	internal class ElementTypeIfcProperties : RootIfcProperties
+	{
+		internal ElementTypeIfcProperties(IfcElementType type) : base(type)
+		{
+			string keyword = type.KeyWord;
+			bool readOnly = true;
+
+			foreach (IfcPropertySet pset in type.HasPropertySets.OfType<IfcPropertySet>())
+			{
+				foreach (IfcPropertySingleValue psv in pset.HasProperties.Values.ToList().OfType<IfcPropertySingleValue>())
+				{
+					IfcValue val = psv.NominalValue;
+					if (val == null)
+						Add(new CustomProperty(psv.Name, "", typeof(string), readOnly, true) { Group = pset.Name });
+					else
+					{
+						Object obj = val.Value;
+						Add(new CustomProperty(psv.Name, obj, obj.GetType(), readOnly, true) { Group = pset.Name });
+					}
+				}
+			}
 		}
 	}
 }

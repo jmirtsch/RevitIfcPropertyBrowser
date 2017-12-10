@@ -20,7 +20,7 @@ namespace RevitIfcPropertyBrowser
 	{
 		private ExternalEvent mExEvent;
 		internal static DockablePaneId mPropertyPanel = null;
-		public Result OnStartup(UIControlledApplication a)
+		public Result OnStartup(UIControlledApplication application)
 		{
 			string tabName = "IFC";
 			RibbonControl myRibbon = ComponentManager.Ribbon;
@@ -35,8 +35,8 @@ namespace RevitIfcPropertyBrowser
 				}
 			}
 			if (ggTab == null)
-				a.CreateRibbonTab(tabName);
-			Autodesk.Revit.UI.RibbonPanel rp = a.CreateRibbonPanel(tabName, "Browser");
+				application.CreateRibbonTab(tabName);
+			Autodesk.Revit.UI.RibbonPanel rp = application.CreateRibbonPanel(tabName, "Browser");
 			PushButtonData pbd = new PushButtonData("propBrowser", "Ifc Property Browser", Assembly.GetExecutingAssembly().Location, "RevitIfcPropertyBrowser.ShowBrowser");
 			pbd.ToolTip = "Show Property Browser";
 
@@ -48,8 +48,7 @@ namespace RevitIfcPropertyBrowser
 			data.InitialState.DockPosition = DockPosition.Tabbed;
 
 			mPropertyPanel = new DockablePaneId(new Guid("{C7C70722-1B9B-4454-A054-DFD142F23580}"));
-			a.RegisterDockablePane(mPropertyPanel, "IFC Properties", browser);
-
+			application.RegisterDockablePane(mPropertyPanel, "IFC Properties", browser);
 
 			foreach (RibbonTab tab in ComponentManager.Ribbon.Tabs)
 			{
@@ -61,8 +60,11 @@ namespace RevitIfcPropertyBrowser
 			}
 			RequestHandler handler = new RequestHandler(browser);
 			mExEvent = ExternalEvent.Create(handler);
+			application.ControlledApplication.DocumentChanged += handler.ControlledApplication_DocumentChanged;
 			return Result.Succeeded;
 		}
+
+		
 
 		public Result OnShutdown(UIControlledApplication a)
 		{

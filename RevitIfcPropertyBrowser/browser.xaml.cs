@@ -14,12 +14,12 @@ namespace RevitIfcPropertyBrowser
 {
 	public partial class Browser : Page, IDockablePaneProvider
 	{
-		internal PropertyGrid mPropertyGrid = null;
+		internal BrowserControl mBrowserControl = null;
 		public Browser()
 		{
 			InitializeComponent();
-			mPropertyGrid = new PropertyGrid();
-			WindowsFormsHost host = new WindowsFormsHost() { Child = mPropertyGrid };
+			mBrowserControl = new BrowserControl();
+			WindowsFormsHost host = new WindowsFormsHost() { Child = mBrowserControl };
 			grid.Children.Add(host);
 		}
 
