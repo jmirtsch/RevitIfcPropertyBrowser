@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="IfcPropertyBrowser" Language="1033" Version="0.0.1.0" Manufacturer="Autodesk" UpgradeCode="763282b4-b4ba-48e5-8919-ff25bdde9f13">
+  <Product Id="*" Name="IfcPropertyBrowser" Language="1033" Version="0.0.1.0" Manufacturer="Autodesk" UpgradeCode="81EC3ACE-D9A7-41FD-8DE6-E003262CDF47">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
@@ -8,7 +8,7 @@
     <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLDIR" Name="Revit IFC 2018">
+        <Directory Id="INSTALLDIR" Name="Revit IFC 2017">
           <Component Id="Assemblies" Guid="{D7DAE6A5-F815-40EA-B126-A4A1A8F36805}">
             <File Id ="FILE_Ifc_RevitIfcPropertyBrowser_DLL" Name="RevitIfcPropertyBrowser.dll" Source="$(var.RevitIfcPropertyBrowser.TargetDir)RevitIfcPropertyBrowser.dll"/>
             <File Id ="FILE_Ifc_GeometryGym_DLL" Name="GeometryGymIFC.dll" Source="$(var.RevitIfcPropertyBrowser.TargetDir)GeometryGymIFC.dll" />
@@ -19,7 +19,7 @@
           <Directory Id="ADComm" Name="Autodesk">
             <Directory Id="RevComm" Name="Revit">
               <Directory Id="Addins" Name="Addins">
-                <Directory Id="V2018" Name="2018">
+                <Directory Id="V2017" Name="2017">
                   <Component Id="Manifest" Guid="{0CBCE01B-9341-43A1-BD68-D69A9C430EFB}">
                     <File Id ="Mnfst" Name='IFCBrowser.addin' Source='$(var.RevitIfcPropertyBrowser.ProjectDir)\IFCBrowser.addin'></File>
                   </Component>

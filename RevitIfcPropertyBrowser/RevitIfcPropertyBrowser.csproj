@@ -100,7 +100,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="IFCBrowser.addin" />
+    <None Include="IFCBrowser.addin">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -120,8 +122,9 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project=".\RevitIfcPropertyBrowser.props" />
   <PropertyGroup>
-    <PostBuildEvent>Copy "$(TargetPath)" "C:\Program Files (x86)\Revit IFC 2018\"
-Copy "$(TargetDir)GeometryGymIFC.dll" "C:\Program Files (x86)\Revit IFC 2018\"
-Copy "$(ProjectDir)IFCBrowser.addin" "C:\ProgramData\Autodesk\Revit\Addins\2018"</PostBuildEvent>
+    <PostBuildEvent>Copy "$(TargetPath)" "C:\Program Files (x86)\Revit IFC 2017\"
+Copy "$(TargetDir)GeometryGymIFC.dll" "C:\Program Files (x86)\Revit IFC 2017\"
+Copy "$(TargetDir)Newtonsoft.Json.dll" "C:\Program Files (x86)\Revit IFC 2017\"
+Copy "$(ProjectDir)IFCBrowser.addin" "C:\ProgramData\Autodesk\Revit\Addins\2017"</PostBuildEvent>
   </PropertyGroup>
 </Project>

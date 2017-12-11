@@ -6,7 +6,7 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>d557ddac-1e9b-46a1-9e88-475cd42594f5</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>Revit2018IfcPropertyBrowser v0.0.1</OutputName>
+    <OutputName>Revit2017IfcPropertyBrowser v0.0.1</OutputName>
     <OutputType>Package</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
