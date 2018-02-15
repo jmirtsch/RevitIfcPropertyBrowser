@@ -26,7 +26,7 @@ namespace RevitIfcPropertyBrowser
 				ICollection<ElementId> elementIds = uiapp.ActiveUIDocument.Selection.GetElementIds();
 				string path = Path.GetTempPath();
 				Document document = uiapp.ActiveUIDocument.Document;
-				if (elementIds.Count == 0)
+				if (document.IsFamilyDocument || elementIds.Count == 0)
 				{
 					mBrowser.mBrowserControl.propertyGrid.SelectedObject = null;
 					return;
@@ -43,22 +43,25 @@ namespace RevitIfcPropertyBrowser
 				DatabaseIfc db = new DatabaseIfc(Path.Combine(path, fileName));
 
 				List<IfcElement> elements = db.Context.Extract<IfcElement>();
-				IEnumerable<object> properties = elements.ConvertAll(x => new ElementIfcProperties(x));
-				IfcElementType type = elements[0].RelatingType as IfcElementType;
-				if(type != null)
+				if (elements.Count > 0)
 				{
-					foreach(IfcElement e in elements)
+					IEnumerable<object> properties = elements.ConvertAll(x => new ElementIfcProperties(x));
+					IfcElementType type = elements[0].RelatingType as IfcElementType;
+					if (type != null)
 					{
-						IfcElementType t = e.RelatingType as IfcElementType;
-						if(t == null || type.Index != t.Index)
+						foreach (IfcElement e in elements)
 						{
-							type = null;
-							break;
+							IfcElementType t = e.RelatingType as IfcElementType;
+							if (t == null || type.Index != t.Index)
+							{
+								type = null;
+								break;
+							}
 						}
 					}
+					mBrowser.mBrowserControl.propertyGrid.SelectedObjects = properties.ToArray();
+					mBrowser.mBrowserControl.ElementType = type;
 				}
-				mBrowser.mBrowserControl.propertyGrid.SelectedObjects = properties.ToArray();
-				mBrowser.mBrowserControl.ElementType = type;
 			}
 			finally
 			{
